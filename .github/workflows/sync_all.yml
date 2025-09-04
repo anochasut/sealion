@@ -1,0 +1,47 @@
+name: Sync Documentation to Public Repo
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  sync_to_public_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout SSOT Repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'AnnaSut/sealion'
+          path: ssot
+
+      - name: Checkout Public Repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'anochasut/sealion'
+          path: public
+          token: ${{ secrets.PUBLIC_REPO_PAT }}
+          
+      - name: Sync docs folder
+        run: |
+          # This command copies content from private to public, deleting files in public
+          # that no longer exist in private. It's a true mirror.
+          # We use rsync, a powerful utility for synchronizing files.
+          # -a: archive mode (preserves permissions, etc.)
+          # -v: verbose (shows which files are being copied)
+          # --delete: This is key! It deletes files in the 'public' destination if they were deleted in the 'ssot' source.
+          # This ensures the public repo is a true mirror.          
+          rsync -av --delete --exclude='.git' './ssot/' './public/'
+
+      - name: Configure git user
+        run: |
+          cd ./public
+          git config user.name "anochasut"
+          git config user.email "anocha.mcomp@gmail.com"
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          repository: ./public
+          commit_message: "docs: Automatic sync from private SSOT repo"
+          branch: main
+          

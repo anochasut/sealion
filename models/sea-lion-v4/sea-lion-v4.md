@@ -8,3 +8,6 @@ SEA-LION version 4, released on Aug 25, is our first multimodal models trained o
 SEA-LION v4 continues our mission to create language models that understand and respond with greater cultural awareness and depth across Southeast Asia. In addition, SEA-LION v4 has the ability to handle both image and text input as a multimodal model.
 
 For detailed information of each of the SEA-LION v4 models, please refer to their individual documentation pages via the links above.
+
+
+# Test 1 2 3 4 5 6 7 8
